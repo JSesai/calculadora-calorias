@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, FormEvent, ChangeEvent } from "react"
 import { categories } from "../data/categories"
 import { Activity } from "../types"
 
@@ -10,7 +10,7 @@ export default function Form() {
         calories: 0
     })
 
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
         //valida si es numero o texto, lo hacemos metiendo las propiedades que deben de ser numericos a un array para usar includes, si esta escribiendo en algun elemento que tiene en su propiedad id category o calories retorna true
         const isNumberField = ['category', 'calories'].includes(e.target.id)
         // console.log(isNumberField);       
@@ -33,7 +33,9 @@ export default function Form() {
 
     }
 
-    const handleSubmit = () => {
+    //fn que envia informacion del formulario
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         console.log('enviando');
         
     }
@@ -84,8 +86,6 @@ export default function Form() {
                     placeholder="Calorias. Ej. 300 o 500"
                     value={activity.calories}
                     onChange={handleChange}
-
-
                 />
             </div>
 
