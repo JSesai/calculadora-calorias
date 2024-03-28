@@ -31,10 +31,10 @@ export const activityReducer = (state: ActivityState = initialState, action: Act
         
         //retoramos el estate con los valores que contiene para no perderlos y agregamos la actividad que dispara el dispatch
         return {
-            ...state,
-            activities: [...state.activities, action.payload.newActivity]
+            ...state,//copia del estado
+            activities: [...state.activities, action.payload.newActivity] //seteo del estado de ativities
         }
-        
+       
     }
 
     //retornamos el estate, es importante para que no marque errores

@@ -1,11 +1,15 @@
 import Form from "./components/Form"
 import { useReducer } from "react" //importamos el use reducer de react para poder usarlo
 import { ActivityActions, activityReducer, initialState } from "./reducers/activity-reducer" //para usar use reducer requerimos el estado inicial y la fn reductora, esto lo hemos definido en el otro archivo por eso lo exportamos
+import ActivityList from "./components/ActivityList"
+
 
 
 function App() {
-  //state corresponde al estado y dispatch es la fn que dispara las acciones
+  //state corresponde al estado del reducer y dispatch es la fn que dispara las acciones del reducer
   const [state, dispatch] = useReducer(activityReducer, initialState) //Pasamos como argumento la funcion reductora estado inicial
+  // console.log(state);
+  
   return (
     <>
       <header className="bg-lime-600 py-3">
@@ -24,6 +28,11 @@ function App() {
             dispatch={dispatch}
            />
         </div>
+      </section>
+
+      <section className="p-10 mx-auto max-w-4xl">       
+        <ActivityList activities={state.activities} />
+      
       </section>
 
     </>

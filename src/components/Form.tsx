@@ -1,4 +1,5 @@
 import { useState, FormEvent, ChangeEvent, Dispatch } from "react"
+import {v4 as uuidv4} from "uuid" //libreria para generear id´s unicos
 import { categories } from "../data/categories"
 import { Activity } from "../types"
 import { ActivityActions } from "../reducers/activity-reducer"
@@ -8,25 +9,33 @@ type FormProps = {
     dispatch: Dispatch<ActivityActions> //toma como referencia Dispach de react y un generic<> que hace referencia a ActivityActions  
 
 }
+//variable que contiene el valor del estado inicial del estate, se hace de esta manera para reutilizar cuando se setea al valor inicia
+const initialState = {
+    id: uuidv4(), //se llama a la fn que genera el id y es con el que arranca el formulario
+    category: 1,
+    name: '',
+    calories: 0   
+}
 
-export default function Form({ dispatch } : FormProps) {
+//fn del componente que recibe por prop la fns que manejan la logica del estado y es dispatch
+export default function Form({ dispatch } : FormProps) { //se define el type de dispatch
 
-    const [activity, setActivity] = useState<Activity>({
-        category: 1,
-        name: '',
-        calories: 0
-    })
+    //estate local del formulario
+    const [activity, setActivity] = useState<Activity>(initialState) //estate que maneja todos los campos del formulario y arranca con el estado inicial de la variable declarada en initialState
 
+    //fn que maneja el estate local del formulario 
     const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
         //valida si es numero o texto, lo hacemos metiendo las propiedades que deben de ser numericos a un array para usar includes, si esta escribiendo en algun elemento que tiene en su propiedad id category o calories retorna true
         const isNumberField = ['category', 'calories'].includes(e.target.id)
         // console.log(isNumberField);       
 
 
-        //setea un objeto al estate
+        //setea un objeto al estate local con la 
         setActivity({
-            ...activity, // toma una copia de los valores del estate
+            ...activity, // toma una copia de los valores del estate local para que los conserve por que si no se hace setea todos los campos del formulario
+            //abajo incgresa a la key del obj y puede ser category, name o calories, evalua si es un numero ya que category y calorias es el unico valor que sera un numero y para guardarlo como numero evalua con la fn
             [e.target.id]: isNumberField ? +e.target.value : e.target.value // accede a la llave del objeto, gracias a que el id de los input y select son nombrados de la misma manera que el estate para que haga referencia de manera correcta al key del objeto del estate
+            
         })
          
     }
@@ -46,6 +55,8 @@ export default function Form({ dispatch } : FormProps) {
         console.log('enviando');
         //usamos el dipatch, se debe pasar el type y el payload 
         dispatch( { type: 'save-activity',payload: {newActivity: activity} } )
+        //setea el estate al estado inicial y añade un nuevo id para que pueda ser usado en el proximo submiteo
+        setActivity({...initialState, id: uuidv4() }) //toma una copia del estate inicial que tiene ud, category, name y calories pero al ponerle otravez el campo id setea el anterior por lo que quedara con los valores declarados en la variable de initialState pero con el id planchado con el valor que retorne el uuidv4
         
     }
     
