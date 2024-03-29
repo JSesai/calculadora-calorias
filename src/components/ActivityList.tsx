@@ -1,18 +1,30 @@
-import { useMemo } from "react"
+import { useMemo, Dispatch } from "react"
 import { Activity } from "../types"
 import { categories } from "../data/categories"
+import { PencilSquareIcon } from "@heroicons/react/24/outline"
+import { ActivityActions } from "../reducers/activity-reducer"
+
 //type de props son definidos cada prop que se pasa 
 type ActivityListProps = {
-    activities: Activity[] //este es el estado y por prop se paso con el nombre de activities
+    activities: Activity[], //este es el estado y por prop se paso con el nombre de activities
+    dispatch: Dispatch<ActivityActions>
 }
 
+
 //fn del componente
-export default function ActivityList({ activities }: ActivityListProps) { //destructuramos lo que pasamos por props, como pasamos el estate desde app.tsx nombrado como activities que es un arreglo con objetos que son las actividades
+export default function ActivityList({ activities, dispatch }: ActivityListProps) { //destructuramos lo que pasamos por props, como pasamos el estate desde app.tsx nombrado como activities que es un arreglo con objetos que son las actividades
     // console.log(activities);
     //usamos use memo para poder renderizar cada vez que cambie el arreglo de las categorias es decir que si se agrega un nuevo item
     const categoryName = useMemo(()=> 
     //se recibe la categoria cuando se llama a la fn que es un numero, entonces lo que hacemos es definir el tipo de dato y ese numero de categoria lo buscamos en los datos de categorias en data que es exportado arriba
     (category : Activity['category']) => categories.map(cat => cat.id === category ? cat.name : null)  ,[activities]) //si la categoria que pasamos coincide con el id de la categoria que estamos recorriendo devuelve el nombre caso contrario null
+
+
+    const handleEditActivity = (id : Activity['id']) => {
+        dispatch({ type: 'set-activeId', payload: { id } })
+
+    }
+
 
     return (
         <>
@@ -30,7 +42,14 @@ export default function ActivityList({ activities }: ActivityListProps) { //dest
                     </div>
 
                     {/* muestra las acciones */}
-                    <div></div>
+                    <div className="flex gap-5 items-center">
+                        <button onClick={()=>handleEditActivity(activity.id)}>
+                            <PencilSquareIcon
+                            className="h-8 w-8 text-gray-800"
+                             />
+                        </button>
+
+                    </div>
                 </div>
             ))}
         </>

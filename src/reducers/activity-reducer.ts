@@ -9,17 +9,20 @@ import { Activity } from "../types";
 
 
 
-//*definimos el type de este reducer
+//*definimos el type de este reducer ; registro de actions
 export type ActivityActions = 
-{ type: 'save-activity', payload: {newActivity: Activity} }
+{ type: 'save-activity', payload: {newActivity: Activity} } |
+{ type: 'set-activeId', payload: {id: Activity['id']} } 
 
 //*definimos el type para estate inicial
 type ActivityState = {
-    activities: Activity[] //definimos que va a ser un arreglo de actividades, que actividades son objetos
+    activities: Activity[], //definimos que va a ser un arreglo de actividades, que actividades son objetos
+    activeId: Activity['id']
 }
 //* Estado inicial del Reducer
 export const initialState : ActivityState = {
-    activities: []
+    activities: [],
+    activeId: ''
 }
 
 //! fn reductora = Reducer : definimos el estate que es el estado y el tipo es activityState y es igual a su estado inicial, y el accion es la accion que modifica el estate y su tipe es activityActions
@@ -35,6 +38,11 @@ export const activityReducer = (state: ActivityState = initialState, action: Act
             activities: [...state.activities, action.payload.newActivity] //seteo del estado de ativities
         }
        
+    }
+
+    if(action.type === 'set-activeId'){
+        console.log('editando', action.payload.id);
+        
     }
 
     //retornamos el estate, es importante para que no marque errores
