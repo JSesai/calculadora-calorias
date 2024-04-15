@@ -39,7 +39,7 @@ export const activityReducer = (state: ActivityState = initialState, action: Act
         }
        
     }
-
+    //action para ac
     if(action.type === 'set-activeId'){
         console.log('editando', action.payload.id);
         
